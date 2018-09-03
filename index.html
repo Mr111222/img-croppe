@@ -70,10 +70,6 @@
                 $('.sub').show();
                 $('#showResult').fadeIn();
                 $(".defaultImg").hide();
-
-            //var data = $image.cropper("getData");
-            //console.log(data);
-            //console.log('imgurl' + imgurl);
         });
 
 
@@ -92,8 +88,13 @@
 
         //radio
         var values = null;
-        $("#changeAvatar").on('click','.radios',function(){
-            $(this).siblings('.newImg').attr('data-radios','1')
+        $("#changeAvatar").on('change','.radios',function(){
+            $(this).siblings('.newImg')
+            	   .attr('data-radios','1')
+            	   .parent('.imgBox')
+            	   .siblings()
+            	   .find('.newImg')
+            	   .attr('data-radios','')
         });
 
         //上传
