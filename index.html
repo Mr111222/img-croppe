@@ -1,0 +1,224 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=yes">
+    <link rel="stylesheet" type="text/css" href="css/cropper.min.css">
+    <link rel="stylesheet" type="text/css" href="css/mui.min.css">
+    <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="js/lrz.all.bundle.js"></script>
+    <script type="text/javascript" src="js/cropper.min.js"></script>
+    <style>
+        #showResult{
+            position: relative;
+        }
+        .sub{
+            position: absolute;
+            right:10px;
+            top:160px;
+        }
+        .imgBox{
+             width:80px;
+             position: relative;
+             float: left;
+             margin:10px;
+        }
+        .newImg{
+            width:80px;
+            height: auto;
+        }
+        .close{
+            position: absolute;
+            right:10px;
+            top:10px;
+            background: red;
+            display: none;
+        }
+    </style>
+    <script type="text/javascript">
+    $(function() {
+
+        function toFixed2(num) {
+            return parseFloat(+num.toFixed(2));
+        }
+
+        //$('#ua').html('UA: ' + navigator.userAgent);
+
+        $('#cancleBtn').on('click', function() {
+            $("#showEdit").fadeOut();
+            $('#showResult').fadeIn();
+        });
+
+        $('#confirmBtn').on('click', function() {
+            var _index = 0
+            $("#showEdit").fadeOut();
+
+            var $image = $('#report > img');
+            var names = $image.attr('data-name') 
+            var dataURL = $image.cropper("getCroppedCanvas");
+            var imgurl = dataURL.toDataURL("image/jpeg", 0.5);
+            var imgs = new Image()
+                imgs.src = imgurl
+                var str = `<div class="imgBox">
+                        <span class="close">xxx</span>    
+                        <img src=${imgurl} data-names=${names}  class="newImg" />
+                        <strong>${names}</strong><br />
+                        <input type="radio" name="default" value="" class="radios"/>设为默认
+                    </div>`
+                $("#changeAvatar").append(str);
+                $('.sub').show();
+                $('#showResult').fadeIn();
+                $(".defaultImg").hide();
+
+            //var data = $image.cropper("getData");
+            //console.log(data);
+            //console.log('imgurl' + imgurl);
+        });
+
+
+        //del photo
+        $("#changeAvatar").on('mouseover','.imgBox',function(){
+            var _this = $(this).find('span') 
+            _this.show();
+            _this.on('click',function(){
+                _this.parent().remove()
+            })     
+        });
+        $("#changeAvatar").on('mouseout','.imgBox',function(){
+            $(this).find('span').hide()
+        });
+
+
+        //radio
+        var values = null;
+        $("#changeAvatar").on('click','.radios',function(){
+            $(this).siblings('.newImg').attr('data-radios','1')
+        });
+
+        //上传
+        $(".submit").on('click',function(){
+            var ss = $('.newImg');
+            $.each(ss,(i,val) => {
+                console.log(`${val.dataset.names}---->${val.dataset.radios}`)
+            })
+        })
+
+
+
+        function cutImg() {
+            $('#showResult').fadeOut();
+            $("#showEdit").fadeIn();
+            var $image = $('#report > img');
+            $image.cropper({
+                aspectRatio: 1 / 1,
+                autoCropArea: 0.7,
+                strict: true,
+                guides: false,
+                center: true,
+                highlight: false,
+                dragCrop: false,
+                cropBoxMovable: false,
+                cropBoxResizable: false,
+                zoom: -0.2,
+                checkImageOrigin: true,
+                background: false,
+                minContainerHeight: 400,
+                minContainerWidth: 300
+            });
+        }
+
+        function doFinish(startTimestamp, sSize, rst,name) {
+            /*var finishTimestamp = (new Date()).valueOf();
+            var elapsedTime = (finishTimestamp - startTimestamp);
+            $('#elapsedTime').text('压缩耗时： ' + elapsedTime + 'ms');
+
+            var sourceSize = toFixed2(sSize / 1024),
+                resultSize = toFixed2(rst.base64Len / 1024),
+                scale = parseInt(100 - (resultSize / sourceSize * 100));
+
+            
+            var p = document.getElementById('zipResult');
+            p.style.fontSize = 13 + 'px';
+            p.innerHTML = '源文件：<span style="color: #ff4136;">' +
+                sourceSize + 'KB' +
+                '</span> <br />' +
+                '压缩后传输Base64：<span style="color: #28b62c;">' +
+                resultSize + 'KB (省' + scale + '%)' +
+                '</span> ';
+            */
+
+
+            $("#report").html('<img src="' + rst.base64 + '" data-name="'+name+'" style="width: 100%;height:100%">');
+            cutImg();
+        }
+
+        $('#image').on('change', function() {
+            var startTimestamp = (new Date()).valueOf();
+            var that = this;
+            lrz(this.files[0], {
+                    width: 800,
+                    height: 800,
+                    quality: 0.7
+                })
+                .then(function(rst) {
+                    doFinish(startTimestamp, that.files[0].size, rst,that.files[0].name);
+                    return rst;
+                })
+                .then(function(rst) {
+                    // 这里该上传给后端啦
+                    // 伪代码：ajax(rst.base64)..
+
+                    return rst;
+                })
+                .then(function(rst) {
+                    // 如果您需要，一直then下去都行
+                    // 因为是Promise对象，可以很方便组织代码 \(^o^)/~
+                })
+                .catch(function(err) {
+                    // 万一出错了，这里可以捕捉到错误信息
+                    // 而且以上的then都不会执行
+
+                    alert(err);
+                })
+                .always(function() {
+                    // 不管是成功失败，这里都会执行
+                });
+        });
+
+    });
+    </script>
+</head>
+
+<body>
+    <div id="showResult">
+        <div style="width: 50%;margin: 0 auto;margin-top: 10px;">
+            <input id="image" type="file" accept="image/*" capture="camera" style="width:70px;" />
+        </div>
+        <!--
+            <div style="width: 80%;">
+                <div id='elapsedTime' style="margin-bottom: 10px"></div>
+                <p id='zipResult'></p>
+                <div id='ua'></div>
+            </div>
+        -->
+        <div id="changeAvatar">
+            <img src="./1.jpg" class="defaultImg" style="width: 100px;margin-top: 10px;margin: 0 auto;display:block;">
+        </div>
+        <div class="sub" style="display:none">
+            <button class="submit">上传</button>
+        </div>
+    </div>
+    <div id="showEdit" style="display: none;width:100%;height: 100%;position: absolute;top:0;left: 0;z-index: 9;">
+        <div style="width:100%;position: absolute;top:10px;left:0px;">
+            <button class="mui-btn" data-mui-style="fab" id='cancleBtn' style="margin-left: 10px;">取消</button>
+            <button class="mui-btn" data-mui-style="fab" data-mui-color="primary" id='confirmBtn' style="float:right;margin-right: 10px;">确定</button>
+        </div>
+        <div id="report">
+            <!-- <img src="mei.jpg" style="width: 300px;height:300px"> -->
+        </div>
+        
+    </div>
+</body>
+
+</html>

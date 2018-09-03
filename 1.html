@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+	<style type="text/css" media="screen">
+		img{
+			width:80px;
+		}
+	</style>
+<body>
+		<div class="imgBox">
+		</div>
+</body>
+<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+<script>
+	$(function(){
+		var res = [
+			{dataUrl:'./image/1.jpg',radios:""},
+			{dataUrl:'./image/2.jpg',radios:""},
+			{dataUrl:'./image/3.jpg',radios:"1"},
+			{dataUrl:'./image/default.jpg',radios:""},
+			{dataUrl:'./image/mei.jpg',radios:""}
+		]
+		var str = ''
+		$.each(res,function(i,val){
+			var checked = val.radios ? 'checked' : false
+			str += `
+				<img src=${val.dataUrl} />
+				<input type="radio" ${checked} name="ss" />
+			`
+		})
+
+		//追加
+		$('.imgBox').append(str)
+	})
+</script>
+</html>
