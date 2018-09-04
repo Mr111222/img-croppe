@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" 
+		  content="width=device-width,
+		  user-scalable=no,
+		  inital-scale=1">
 	<title>Document</title>
 </head>
 	<style type="text/css" media="screen">
@@ -15,6 +19,121 @@
 </body>
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script>
+	var arrs =[
+	  {
+	    "Id": 235,
+	    "ClientId": "btn-baseInfoSave",
+	    "ControlName": "基本信息保存",
+	    "MenuId": 75,
+	    "BtnType": 0,
+	    "RelevanceUrl": null
+	  },
+	  {
+	    "Id": 124,
+	    "ClientId": "btn-areacode",
+	    "ControlName": "省市区下拉组件",
+	    "MenuId": 64,
+	    "BtnType": 0,
+	    "RelevanceUrl": null
+	  },
+	  {
+	    "Id": 140,
+	    "ClientId": "btn-warehouse",
+	    "ControlName": "仓库下拉组件",
+	    "MenuId": 64,
+	    "BtnType": 0,
+	    "RelevanceUrl": null
+	  },
+	  {
+	    "Id": 141,
+	    "ClientId": "btn-supermarket",
+	    "ControlName": "超市下拉组件",
+	    "MenuId": 64,
+	    "BtnType": 0,
+	    "RelevanceUrl": null
+	  },
+	  {
+	    "Id": 142,
+	    "ClientId": "btn-catalog",
+	    "ControlName": "商品分类组件",
+	    "MenuId": 64,
+	    "BtnType": 0,
+	    "RelevanceUrl": null
+	  },
+	  {
+	    "Id": 189,
+	    "ClientId": "btn-goodsbrand",
+	    "ControlName": "商品品牌组件",
+	    "MenuId": 64,
+	    "BtnType": 0,
+	    "RelevanceUrl": null
+	  },
+	  {
+	    "Id": 290,
+	    "ClientId": "btn-supermarkets",
+	    "ControlName": "收银机超市下拉组件",
+	    "MenuId": 64,
+	    "BtnType": 0,
+	    "RelevanceUrl": null
+	  },
+	  {
+	    "Id": 296,
+	    "ClientId": "btn-goodsBrandCatalog",
+	    "ControlName": "商品分类品牌关联下拉组件",
+	    "MenuId": 64,
+	    "BtnType": 0,
+	    "RelevanceUrl": null
+	  },
+	  {
+	    "Id": 367,
+	    "ClientId": "btn-supermarketsearch",
+	    "ControlName": "搜索区域超市下拉组件",
+	    "MenuId": 64,
+	    "BtnType": 0,
+	    "RelevanceUrl": null
+	  },
+	  {
+	    "Id": 23,
+	    "ClientId": "public-btn-Log",
+	    "ControlName": "系统操作日志",
+	    "MenuId": 45,
+	    "BtnType": 0,
+	    "RelevanceUrl": null
+	  },
+	  {
+	    "Id": 24,
+	    "ClientId": "public-btn-GoodsLog",
+	    "ControlName": "商品操作日志",
+	    "MenuId": 45,
+	    "BtnType": 0,
+	    "RelevanceUrl": null
+	  },
+	  {
+	    "Id": 498,
+	    "ClientId": "public-view-goodsLog-secretlog",
+	    "ControlName": "商品操作日志详细内容",
+	    "MenuId": 45,
+	    "BtnType": 0,
+	    "RelevanceUrl": null
+	  },
+	  {
+	    "Id": 25,
+	    "ClientId": "public-btn-CardLog",
+	    "ControlName": "一卡通操作日志",
+	    "MenuId": 45,
+	    "BtnType": 0,
+	    "RelevanceUrl": null
+	  },
+	  {
+	    "Id": 98,
+	    "ClientId": "public-btn-upload",
+	    "ControlName": "上传组件",
+	    "MenuId": 63,
+	    "BtnType": 0,
+	    "RelevanceUrl": null
+	  }
+	];
+
 	$(function(){
 		var res = [
 			{dataUrl:'./image/1.jpg',radios:""},
@@ -24,6 +143,7 @@
 			{dataUrl:'./image/mei.jpg',radios:""}
 		]
 		var str = ''
+		//根据radios来显示是否显示已经选中
 		$.each(res,function(i,val){
 			var checked = val.radios ? 'checked' : false
 			str += `
@@ -31,6 +151,7 @@
 				<input type="radio" ${checked} name="ss" />
 			`
 		})
+
 
 		//追加
 		$('.imgBox').append(str)
